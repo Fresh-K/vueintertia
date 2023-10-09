@@ -24,15 +24,18 @@ Route::get('/', function () {
         'phpVersion' => PHP_VERSION,
     ]);
 });
-Route::get('/courses', [CourseController::class, 'index'])->name('courses.index');
-Route::get('/courses/{id}', [CourseController::class, 'show'])->name('courses.show');
 
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
+    Route::get('/courses', [CourseController::class, 'index'])->name('courses.index');
+    Route::post('/courses', [CourseController::class, 'store']);
+
     Route::get('/courses/{id}', [CourseController::class, 'show'])->name('courses.show');
+    Route::post('/toggleProgress', [CourseController::class, 'toggleProgress']);
+
     Route::get('/dashboard', function () {
         return Inertia::render('Dashboard');
     })->name('dashboard');
