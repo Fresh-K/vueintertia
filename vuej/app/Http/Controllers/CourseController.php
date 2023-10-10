@@ -46,6 +46,31 @@ class CourseController extends Controller
         return Redirect::route('dashboard')->with('success', 'Félicitations, votre formation a bien été postée.');
     }
 
+
+
+    public function edit($id){
+        $course = Course::where('id',$id)->with('episodes')->first();
+        $this->authorize('update', $course);
+
+        return Inertia::render('courses/Edit', compact('course'));
+    }
+
+    public function update(Request $request){
+        $course = Course::where('id', $request->id)->first();
+        $this->authorize('update', $course);
+        $course->update($request->all());
+        $course->episodes()->delete();
+
+        foreach($request->episodes as $episode) {
+            $episode['course_id'] = $course->id;
+            Episode::create($episode);
+        }
+
+        return Redirect::route('courses.index')->with('success', 'Félicitations, votre formation a bien été modifiée.');
+    }
+
+
+
     public function toggleProgress(Request $request){
 
 

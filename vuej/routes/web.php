@@ -34,6 +34,10 @@ Route::middleware([
     Route::post('/courses', [CourseController::class, 'store']);
 
     Route::get('/courses/{id}', [CourseController::class, 'show'])->name('courses.show');
+    Route::get('/courses/edit/{id}', [CourseController::class, 'edit'])->name('courses.edit');
+    Route::patch('/courses/update/{id}', [CourseController::class, 'update']);
+
+
     Route::post('/toggleProgress', [CourseController::class, 'toggleProgress']);
 
     Route::get('/dashboard', function () {
